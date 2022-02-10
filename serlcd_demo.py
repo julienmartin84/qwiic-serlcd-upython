@@ -2,18 +2,19 @@
 # Written by Julien Martin, February 2022
 #-----------------------------------------------------------------------------
 
-import qwiic_serlcd_u
+from machine import Pin, I2C
+from qwiic_serlcd_u import QwiicSerlcdU
 import utime
 
 # i2c settings
-sda = machine.Pin(0)
-scl = machine.Pin(1)
-i2c = machine.I2C(0, sda=sda, scl=scl, freq=400000)
+sda = Pin(0) # blue qwiic wire
+scl = Pin(1) # yellow qwiic wire
+i2c = I2C(0, sda=sda, scl=scl, freq=400000)
 
-# lcd settings
-lcd = qwiic_serlcd_u.QwiicSerlcdU(i2c, 0x72, 16, 2)
+# create the lcd object with i2c driver, screen address, columns and rows numbers
+lcd = QwiicSerlcdU(i2c, 0x72, 16, 2)
 
-# init lcd
+# lcd initialization, mandatory
 lcd.begin()
 
 # load default settings
@@ -94,12 +95,9 @@ i = 254
 j = 0
 while i!=20:
     lcd.set_rgb_backlight(j, j, i)
-    if i < 40:
+    if i < 41:
         j += 1
     i -= 1
-    print("i=", i)
-    print("j=", j)
-print("j=", j)
 
 # end of demo
 lcd.display("The end")

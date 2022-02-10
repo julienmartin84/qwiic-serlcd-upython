@@ -79,13 +79,13 @@ class QwiicSerlcdU:
         self.index = 0
     
     # Initialize the operation of the SerLCD module
+    # Also wait 1 second for i2c to be ready before doing anything
     def begin(self):
+        # wait for i2c initialization
+        utime.sleep(1)
         result0 = self.send_commands([SPECIAL_COMMAND, LCD_DISPLAYCONTROL | self._displayControl])
-        utime.sleep(1)
         result1 = self.send_commands([SPECIAL_COMMAND, LCD_ENTRYMODESET | self._displayMode])
-        utime.sleep(1)
         result2 = self.clear_display()
-        utime.sleep(1)
         return (bool(result0) & bool(result1) & bool(result2))
     
     # Set default settings
